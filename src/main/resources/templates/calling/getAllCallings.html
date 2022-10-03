@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/index.css" th:href="@{/index.css}" rel="stylesheet" />
+    <title>Where - Lista de Chamados</title>
+</head>
+<body>
+    <div>
+        <h2>Lista de chamados:</h2>
+
+        <table>
+            <thead>
+              <tr>
+                <th th:text="Id"></th>
+                <th th:text="Titulo"></th>
+                <th th:text="Descrição"></th>
+                <th th:text="Criador"></th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="calling: ${callings}">
+                <td th:text="${calling.id}"></td>
+                <td th:text="${calling.title}"></td>
+                <td th:text="${calling.description}"></td>
+                <td th:text="${calling.user}"></td>
+                <td>
+                  <a th:href="@{/calling/deleteCalling/{id}(id=${calling.id})}">Remover</a>
+                  <a th:href="@{/calling/getCalling/{id}(id=${calling.id})}">Detalhes</a>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+
+        <br />
+
+        <a href="/calling/createCallingForm">Novo chamado</a>
+        <br />
+        
+        <a href="/">Voltar para o menu</a>
+        <br />
+    </div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+}
+
+body {
+  font-size: 14px;
+  font-family: Arial;
+  width: 100vw;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+th {
+  text-align: left;
+}
+
+tr {
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+input, select, option {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+a, input[type="submit"] {
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 15px;
+  color: #ffffff;
+  background-color: #444;
+  max-width: 150px;
+}
+
+input[type="submit"] {
+  background-color: #f11444;
+  margin-bottom: 30px;
+}
+
+img {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+}

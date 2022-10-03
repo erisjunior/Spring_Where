@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/index.css" th:href="@{/index.css}" rel="stylesheet" />
+    <title>Where - Lista de Lojas</title>
+</head>
+<body>
+    <div>
+        <h2>Lista de lojas:</h2>
+
+        <table>
+            <thead>
+              <tr>
+                <th th:text="Id"></th>
+                <th th:text="Nome"></th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="store: ${stores}">
+                <td th:text="${store.id}"></td>
+                <td th:text="${store.name}"></td>
+                <td>
+                  <a th:href="@{/store/deleteStore/{id}(id=${store.id})}">Remover</a>
+                  <a th:href="@{/store/getStore/{id}(id=${store.id})}">Detalhes</a>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+
+        <br />
+
+        <a href="/store/createStoreForm">Nova loja</a>
+        <br />
+        
+        <a href="/">Voltar para o menu</a>
+        <br />
+    </div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/index.css" th:href="@{/index.css}" rel="stylesheet" />
+    <title>Where - Chamado</title>
+</head>
+<body>
+    <div>
+        <h2 th:text="${calling.title}"></h2>
+
+        <p th:text="${calling.description}"></p>
+
+        <br />
+
+        <h4>Lojas que responderam:</h4>
+
+        <table>
+            <thead>
+              <tr>
+                <th th:text="Id"></th>
+                <th th:text="Nome"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="store: ${calling.stores}">
+                <td th:text="${store.id}"></td>
+                <td th:text="${store.name}"></td>
+              </tr>
+            </tbody>
+        </table>
+
+        <br />
+
+        <a href="/calling/getAllCallings">Ver lista de chamados</a>
+        <br />
+        
+        <a href="/">Voltar para o menu</a>
+        <br />
+    </div>
+</body>
+</html>

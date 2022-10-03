@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/index.css" th:href="@{/index.css}" rel="stylesheet" />
+    <title>Where - Criar Chamado</title>
+</head>
+<body>
+    <div>
+        <form action="#" th:action="@{/calling/createCalling}" th:object="${calling}" method="post">
+            <p>
+                Titulo do chamado:
+                <input type="text" th:field="*{title}" placeholder="Insira o título" />
+            </p>
+            <p>
+                Descrição do chamado:
+                <input type="text" th:field="*{description}" placeholder="Insira a descrição" />
+            </p>
+            <p>Criador do chamado: 
+                <select th:field="*{user}">
+                    <option th:each="user: ${users}" th:value="${user.id}" th:text="${user.name}">
+                </select>
+            </p>
+            <p>
+                <input type="submit" value="Adicionar" />
+            </p>
+        </form>
+
+        <br />
+
+        <a href="/calling/getAllCallings">Ver lista de chamados</a>
+        <br />
+        
+        <a href="/">Voltar para o menu</a>
+        <br />
+    </div>
+</body>
+</html>

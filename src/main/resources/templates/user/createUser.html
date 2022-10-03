@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static/index.css" th:href="@{/index.css}" rel="stylesheet" />
+    <title>Where - Criar Usuário</title>
+</head>
+<body>
+    <div>
+        <form action="#" th:action="@{/user/createUser}" th:object="${user}" method="post">
+            <p>
+                Nome:
+                <input type="text" th:field="*{name}" placeholder="Insira o nome" />
+            </p>
+            <p>
+                <input type="submit" value="Adicionar" />
+            </p>
+        </form>
+
+        <br />
+
+        <a href="/user/getAllUsers">Ver lista de usuários</a>
+        <br />
+        
+        <a href="/">Voltar para o menu</a>
+        <br />
+    </div>
+</body>
+</html>
