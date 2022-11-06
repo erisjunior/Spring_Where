@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.erisvan.where.enums.StatusPedido;
+import com.erisvan.where.enums.CallingStatus;
 import com.erisvan.where.model.ItemPedido;
 import com.erisvan.where.model.Pedido;
 import com.erisvan.where.rest.dto.AtualizacaoStatusPedidoDTO;
@@ -81,6 +81,6 @@ public class PedidoController {
     public void updateStatus(@PathVariable Integer id,
             @RequestBody AtualizacaoStatusPedidoDTO dto) {
         String novoStatus = dto.getNovoStatus();
-        service.atualizaStatus(id, StatusPedido.valueOf(novoStatus));
+        service.atualizaStatus(id, CallingStatus.valueOf(novoStatus));
     }
 }

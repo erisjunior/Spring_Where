@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.erisvan.where.model.User;
+import com.erisvan.where.model.Client;
 import com.erisvan.where.service.UserService;
 
 @Controller
@@ -21,26 +21,26 @@ public class UserController {
 
     @RequestMapping("/createUserForm")
     public String createUserForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new Client());
         return "user/createUser";
     }
 
     @RequestMapping("/createUser")
-    public String createUser(@ModelAttribute("user") User user, Model model) {
+    public String createUser(@ModelAttribute("user") Client user, Model model) {
         userService.createUser(user);
         return getAllUsers(model);
     }
 
     @RequestMapping("/deleteUser/{idUser}")
     public String deleteUser(@PathVariable String idUser, Model model) {
-        User user = userService.getUserById(Integer.parseInt(idUser));
+        Client user = userService.getUserById(Integer.parseInt(idUser));
         userService.deleteUser(user);
         return getAllUsers(model);
     }
 
     @RequestMapping("/getUser/{idUser}")
     public String getUser(@PathVariable String idUser, Model model) {
-        User user = userService.getUserById(Integer.parseInt(idUser));
+        Client user = userService.getUserById(Integer.parseInt(idUser));
         model.addAttribute("user", user);
         model.addAttribute("hasAvatar", user.getAvatar() != null);
         return "user/getUser";

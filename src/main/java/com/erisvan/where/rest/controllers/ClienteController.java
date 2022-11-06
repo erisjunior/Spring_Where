@@ -21,7 +21,7 @@ import com.erisvan.where.model.Cliente;
 import com.erisvan.where.repository.ClienteRepository;
 
 @RequestMapping("/api/clientes")
-@RestController // anotação especializadas de controller - todos já anotados com response body!
+@RestController
 public class ClienteController {
 
     @Autowired
@@ -31,8 +31,7 @@ public class ClienteController {
     public Cliente getClienteById(@PathVariable Integer id) {
         return clientes
                 .findById(id)
-                .orElseThrow(() -> // se nao achar lança o erro!
-                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Cliente não encontrado"));
     }
 

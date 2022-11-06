@@ -1,6 +1,6 @@
 package com.erisvan.where.enums;
 
-public enum StatusPedido {
+public enum CallingStatus {
 
     REALIZADO,
     CANCELADO;

@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.erisvan.where.enums.StatusPedido;
-import com.erisvan.where.exception.PedidoNaoEncontradoException;
-import com.erisvan.where.exception.RegraNegocioException;
+import com.erisvan.where.enums.CallingStatus;
+import com.erisvan.where.exception.NotFoundException;
+import com.erisvan.where.exception.BusinessException;
 import com.erisvan.where.model.Cliente;
 import com.erisvan.where.model.ItemPedido;
 import com.erisvan.where.model.Pedido;
@@ -41,13 +41,13 @@ public class PedidoServiceImpl implements PedidoService {
         Integer idCliente = dto.getCliente();
         Cliente cliente = clientesRepository
                 .findById(idCliente)
-                .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido."));
+                .orElseThrow(() -> new BusinessException("Código de cliente inválido."));
 
         Pedido pedido = new Pedido();
         pedido.setTotal(dto.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
-        pedido.setStatus(StatusPedido.REALIZADO);
+        pedido.setStatus(CallingStatus.REALIZADO);
 
         List<ItemPedido> itemsPedido = converterItems(pedido, dto.getItems());
         repository.save(pedido);
@@ -58,7 +58,7 @@ public class PedidoServiceImpl implements PedidoService {
 
     private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items) {
         if (items.isEmpty()) {
-            throw new RegraNegocioException("Não é possível realizar um pedido sem items.");
+            throw new BusinessException("Não é possível realizar um pedido sem items.");
         }
 
         return items
@@ -68,7 +68,7 @@ public class PedidoServiceImpl implements PedidoService {
                     Produto produto = produtosRepository
                             .findById(idProduto)
                             .orElseThrow(
-                                    () -> new RegraNegocioException(
+                                    () -> new BusinessException(
                                             "Código de produto inválido: " + idProduto));
 
                     ItemPedido itemPedido = new ItemPedido();
@@ -87,13 +87,13 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
-    public void atualizaStatus(Integer id, StatusPedido statusPedido) {
+    public void atualizaStatus(Integer id, CallingStatus statusPedido) {
         repository
                 .findById(id)
                 .map(pedido -> {
                     pedido.setStatus(statusPedido);
                     return repository.save(pedido);
-                }).orElseThrow(() -> new PedidoNaoEncontradoException());
+                }).orElseThrow(() -> new NotFoundException());
 
     }
 }

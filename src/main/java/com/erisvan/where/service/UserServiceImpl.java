@@ -5,32 +5,32 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.erisvan.where.model.User;
-import com.erisvan.where.repository.UserRepository;
+import com.erisvan.where.model.Client;
+import com.erisvan.where.repository.ClientRepository;
 
 @Component
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository userRepository;
+    ClientRepository userRepository;
 
     @Override
-    public List<User> getAllUsers() {
+    public List<Client> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(Client user) {
         userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(User user) {
+    public void deleteUser(Client user) {
         userRepository.delete(user);
     }
 
     @Override
-    public User getUserById(Integer id) {
+    public Client getUserById(Integer id) {
         return userRepository.findById(id).map(user -> {
             return user;
         }).orElseThrow(() -> null);

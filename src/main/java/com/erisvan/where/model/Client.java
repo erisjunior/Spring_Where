@@ -1,13 +1,18 @@
 package com.erisvan.where.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,31 +24,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "usuario")
-public class User {
+@Table(name = "client")
+public class Client {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
-    @NotEmpty(message = "{field.login.required}")
-    private String login;
-
-    @Column
-    @NotEmpty(message = "{field.password.required}")
-    private String senha;
+    @Column(length = 100)
+    private String name;
 
     @OneToOne(optional = true)
     private Avatar avatar;
 
-    @OneToOne(optional = true)
-    private Store store;
-
-    @OneToOne(optional = true)
-    private Client client;
-
-    @Column
-    private boolean admin;
+    @JsonIgnore
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private Set<Calling> callings;
 
 }

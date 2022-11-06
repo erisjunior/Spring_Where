@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.erisvan.where.model.Usuario;
-import com.erisvan.where.repository.UsuarioRepository;
+import com.erisvan.where.model.User;
+import com.erisvan.where.repository.UserRepository;
 
 /*
  * interface do spring security serve para definir o carregam, UserDetailsento de usuários através de uma base de dados
@@ -23,17 +23,17 @@ public class UsuarioServiceImpl implements UserDetailsService {
     public PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UsuarioRepository repository;
+    private UserRepository repository;
 
     @Transactional
-    public Usuario salvar(Usuario usuario) {
+    public User salvar(User usuario) {
         return repository.save(usuario);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Usuario usuario = repository.findByLogin(username)
+        User usuario = repository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
         String[] roles = usuario.isAdmin() ? new String[] { "ADMIN", "USER" } : new String[] { "USER" };

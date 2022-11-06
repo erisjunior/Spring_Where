@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.erisvan.where.model.User;
+import com.erisvan.where.model.Client;
 
 @Service
 public interface UserService {
 
-    public List<User> getAllUsers();
+    public List<Client> getAllUsers();
 
-    public void createUser(User user);
+    public void createUser(Client user);
 
-    public void deleteUser(User user);
+    public void deleteUser(Client user);
 
-    public User getUserById(Integer id);
+    public Client getUserById(Integer id);
 
 }

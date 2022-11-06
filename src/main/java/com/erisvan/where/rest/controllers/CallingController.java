@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.erisvan.where.model.Calling;
-import com.erisvan.where.model.User;
+import com.erisvan.where.model.Client;
 import com.erisvan.where.service.CallingService;
 import com.erisvan.where.service.UserService;
 
@@ -34,7 +34,7 @@ public class CallingController {
 
     @RequestMapping("/createCallingFormFromUser/{idUser}")
     public String createCallingForm(@PathVariable String idUser, Model model) {
-        User user = userService.getUserById(Integer.parseInt(idUser));
+        Client user = userService.getUserById(Integer.parseInt(idUser));
         Calling calling = new Calling();
         calling.setUser(user);
 
