@@ -1,71 +1,59 @@
 package com.erisvan.where.rest.controllers;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.erisvan.where.model.Calling;
-import com.erisvan.where.model.Client;
+import com.erisvan.where.rest.dto.CallingDTO;
 import com.erisvan.where.service.CallingService;
-import com.erisvan.where.service.impl.UserService;
 
-@Controller
-@RequestMapping("/calling")
+@RequestMapping("/api/callings")
+@RestController
 public class CallingController {
 
     @Autowired
     @Qualifier("callingServiceImpl")
-    CallingService callingService;
+    CallingService service;
 
-    @Autowired
-    @Qualifier("userServiceImpl")
-    ClientService userService;
-
-    @RequestMapping("/createCallingForm")
-    public String createCallingForm(Model model) {
-        model.addAttribute("calling", new Calling());
-        model.addAttribute("users", userService.getAllUsers());
-        return "calling/createCalling";
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Calling save(@RequestBody CallingDTO dto) {
+        return service.save(dto);
     }
 
-    @RequestMapping("/createCallingFormFromUser/{idUser}")
-    public String createCallingForm(@PathVariable String idUser, Model model) {
-        Client user = userService.getUserById(Integer.parseInt(idUser));
-        Calling calling = new Calling();
-        calling.setUser(user);
-
-        model.addAttribute("calling", calling);
-        model.addAttribute("users", userService.getAllUsers());
-        return "calling/createCalling";
+    @GetMapping("{id}")
+    public Optional<Calling> get(@PathVariable Integer id) {
+        return service.get(id);
     }
 
-    @RequestMapping("/createCalling")
-    public String createCalling(@ModelAttribute("calling") Calling calling, Model model) {
-        callingService.createCalling(calling);
-        return getAllCallings(model);
+    @GetMapping
+    public List<Calling> getAll(Calling filter) {
+        return service.getAll();
     }
 
-    @RequestMapping("/deleteCalling/{idCalling}")
-    public String deleteCalling(@PathVariable String idCalling, Model model) {
-        Calling calling = callingService.getCallingById(Integer.parseInt(idCalling));
-        callingService.deleteCalling(calling);
-        return getAllCallings(model);
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        service.delete(id);
     }
 
-    @RequestMapping("/getCalling/{idCalling}")
-    public String getCalling(@PathVariable String idCalling, Model model) {
-        Calling calling = callingService.getCallingById(Integer.parseInt(idCalling));
-        model.addAttribute("calling", calling);
-        return "calling/getCalling";
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Integer id, @RequestBody CallingDTO dto) {
+        service.update(id, dto);
     }
 
-    @RequestMapping("/getAllCallings")
-    public String getAllCallings(Model model) {
-        model.addAttribute("callings", callingService.getAllCallings());
-        return "calling/getAllCallings";
-    }
 }

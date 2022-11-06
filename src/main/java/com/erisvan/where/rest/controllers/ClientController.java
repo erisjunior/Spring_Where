@@ -16,31 +16,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erisvan.where.model.Store;
-import com.erisvan.where.rest.dto.StoreDTO;
-import com.erisvan.where.service.StoreService;
+import com.erisvan.where.model.Client;
+import com.erisvan.where.rest.dto.ClientDTO;
+import com.erisvan.where.service.ClientService;
 
-@RequestMapping("/api/stores")
+@RequestMapping("/api/clients")
 @RestController
-public class StoreController {
+public class ClientController {
 
     @Autowired
-    @Qualifier("storeServiceImpl")
-    StoreService service;
+    @Qualifier("clientServiceImpl")
+    ClientService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Store save(@RequestBody StoreDTO dto) {
+    public Client save(@RequestBody ClientDTO dto) {
         return service.save(dto);
     }
 
     @GetMapping("{id}")
-    public Optional<Store> get(@PathVariable Integer id) {
+    public Optional<Client> get(@PathVariable Integer id) {
         return service.get(id);
     }
 
     @GetMapping
-    public List<Store> getAll(Store filter) {
+    public List<Client> getAll(Client filter) {
         return service.getAll();
     }
 
@@ -52,7 +52,7 @@ public class StoreController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Integer id, @RequestBody StoreDTO dto) {
+    public void update(@PathVariable Integer id, @RequestBody ClientDTO dto) {
         service.update(id, dto);
     }
 
