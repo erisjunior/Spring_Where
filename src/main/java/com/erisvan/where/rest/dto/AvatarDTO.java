@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.erisvan.where.model.Account;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemPedidoDTO {
-    private Integer produto;
-    private Integer quantidade;
+public class AvatarDTO {
+    private String url;
+    private Account account;
 }

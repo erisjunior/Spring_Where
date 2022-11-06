@@ -37,13 +37,12 @@ public class Calling {
     @Column(length = 100)
     private String title;
 
-    @NotEmpty(message = "{field.description.required}")
     @Column(length = 100)
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Client user;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(name = "store_callings", joinColumns = @JoinColumn(name = "calling_id"), inverseJoinColumns = @JoinColumn(name = "store_id"))

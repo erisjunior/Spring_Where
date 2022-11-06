@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.erisvan.where.model.Calling;
 import com.erisvan.where.model.Client;
 import com.erisvan.where.service.CallingService;
-import com.erisvan.where.service.UserService;
+import com.erisvan.where.service.impl.UserService;
 
 @Controller
 @RequestMapping("/calling")
@@ -23,7 +23,7 @@ public class CallingController {
 
     @Autowired
     @Qualifier("userServiceImpl")
-    UserService userService;
+    ClientService userService;
 
     @RequestMapping("/createCallingForm")
     public String createCallingForm(Model model) {

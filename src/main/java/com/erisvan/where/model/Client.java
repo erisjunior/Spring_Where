@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,11 +32,12 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty(message = "{field.name.required}")
     @Column(length = 100)
     private String name;
 
-    @OneToOne(optional = true)
-    private Avatar avatar;
+    @OneToOne()
+    private Account account;
 
     @JsonIgnore
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)

@@ -1,20 +1,20 @@
 package com.erisvan.where.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import com.erisvan.where.model.Avatar;
+import com.erisvan.where.rest.dto.AvatarDTO;
 
-@Service
 public interface AvatarService {
+    Avatar save(AvatarDTO dto);
 
-    public List<Avatar> getAllAvatars();
+    Optional<Avatar> get(Integer id);
 
-    public void createAvatar(Avatar avatar);
+    List<Avatar> getAll();
 
-    public void deleteAvatar(Avatar avatar);
+    void delete(Integer id);
 
-    public Avatar getAvatarById(Integer id);
+    Avatar update(Integer id, AvatarDTO dto);
 
 }

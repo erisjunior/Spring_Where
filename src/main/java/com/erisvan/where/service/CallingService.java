@@ -1,20 +1,20 @@
 package com.erisvan.where.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import com.erisvan.where.model.Calling;
+import com.erisvan.where.rest.dto.CallingDTO;
 
-@Service
 public interface CallingService {
+    Calling save(CallingDTO dto);
 
-    public List<Calling> getAllCallings();
+    Optional<Calling> get(Integer id);
 
-    public void createCalling(Calling calling);
+    List<Calling> getAll();
 
-    public void deleteCalling(Calling calling);
+    void delete(Integer id);
 
-    public Calling getCallingById(Integer id);
+    Calling update(Integer id, CallingDTO dto);
 
 }

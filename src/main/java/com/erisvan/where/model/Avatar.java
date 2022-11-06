@@ -31,6 +31,6 @@ public class Avatar {
     private String url;
 
     @OneToOne(optional = true)
-    private Client user;
+    private Account account;
 
 }

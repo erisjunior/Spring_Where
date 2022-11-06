@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "usuario")
-public class User {
+@Table(name = "account")
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +32,7 @@ public class User {
 
     @Column
     @NotEmpty(message = "{field.password.required}")
-    private String senha;
+    private String password;
 
     @OneToOne(optional = true)
     private Avatar avatar;

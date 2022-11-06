@@ -1,20 +1,20 @@
 package com.erisvan.where.service;
 
 import java.util.List;
-
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import com.erisvan.where.model.Store;
+import com.erisvan.where.rest.dto.StoreDTO;
 
-@Service
 public interface StoreService {
+    Store save(StoreDTO dto);
 
-    public List<Store> getAllStores();
+    Optional<Store> get(Integer id);
 
-    public void createStore(Store store);
+    List<Store> getAll();
 
-    public void deleteStore(Store store);
+    void delete(Integer id);
 
-    public Store getStoreById(Integer id);
+    Store update(Integer id, StoreDTO dto);
 
 }
