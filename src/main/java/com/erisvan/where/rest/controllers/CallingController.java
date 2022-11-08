@@ -43,6 +43,11 @@ public class CallingController {
         return service.getAll();
     }
 
+    @GetMapping("category/{categoryId}")
+    public List<Calling> getByCategory(@PathVariable Integer categoryId) {
+        return service.getByCategory(categoryId);
+    }
+
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {

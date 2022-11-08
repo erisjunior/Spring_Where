@@ -15,6 +15,8 @@ public interface CallingService {
 
     List<Calling> getAll();
 
+    List<Calling> getByCategory(Integer categoryId);
+
     void delete(Integer id);
 
     Calling update(Integer id, CallingDTO dto);

@@ -9,6 +9,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +32,7 @@ public class Account {
     @NotEmpty(message = "{field.login.required}")
     private String login;
 
+    @JsonIgnore
     @Column
     @NotEmpty(message = "{field.password.required}")
     private String password;

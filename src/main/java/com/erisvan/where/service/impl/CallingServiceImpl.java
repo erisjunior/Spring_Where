@@ -63,6 +63,14 @@ public class CallingServiceImpl implements CallingService {
     }
 
     @Override
+    public List<Calling> getByCategory(Integer categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new BusinessException("Invalid category id."));
+
+        return repository.findAllByCategory(category);
+    }
+
+    @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }

@@ -71,4 +71,10 @@ public class AccountController {
     public void update(@PathVariable Integer id, @RequestBody AccountDTO dto) {
         service.update(id, dto);
     }
+
+    @PostMapping("{id}/admin")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void toggleAdmin(@PathVariable Integer id) {
+        service.toggleAdmin(id);
+    }
 }

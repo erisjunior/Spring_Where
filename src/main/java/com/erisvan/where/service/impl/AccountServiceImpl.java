@@ -139,6 +139,19 @@ public class AccountServiceImpl implements UserDetailsService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
     }
 
+    public Account toggleAdmin(Integer id) {
+        Optional<Account> account = repository.findById(id);
+
+        if (account.isPresent()) {
+
+            account.get().setAdmin(!account.get().isAdmin());
+
+            return repository.save(account.get());
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
+    }
+
     public UserDetails auth(Account account) {
         UserDetails user = loadUserByUsername(account.getLogin());
         boolean passwordMatch = passwordEncoder.matches(account.getPassword(), user.getPassword());
