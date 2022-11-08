@@ -33,6 +33,12 @@ public class CallingController {
         return service.save(dto);
     }
 
+    @PostMapping("{id}/answer/{storeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void answerStore(@PathVariable Integer id, @PathVariable Integer storeId) {
+        service.answerStore(id, storeId);
+    }
+
     @GetMapping("{id}")
     public Calling get(@PathVariable Integer id) {
         return service.get(id);

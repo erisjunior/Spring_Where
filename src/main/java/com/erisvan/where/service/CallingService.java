@@ -21,4 +21,6 @@ public interface CallingService {
 
     Calling update(Integer id, CallingDTO dto);
 
+    Calling answerStore(Integer id, Integer storeId);
+
 }

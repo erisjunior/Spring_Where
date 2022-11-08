@@ -12,9 +12,11 @@ import com.erisvan.where.exception.BusinessException;
 import com.erisvan.where.model.Calling;
 import com.erisvan.where.model.Category;
 import com.erisvan.where.model.Client;
+import com.erisvan.where.model.Store;
 import com.erisvan.where.repository.CallingRepository;
 import com.erisvan.where.repository.CategoryRepository;
 import com.erisvan.where.repository.ClientRepository;
+import com.erisvan.where.repository.StoreRepository;
 import com.erisvan.where.rest.dto.CallingDTO;
 import com.erisvan.where.service.CallingService;
 
@@ -29,6 +31,9 @@ public class CallingServiceImpl implements CallingService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    StoreRepository storeRepository;
 
     @Override
     public Calling save(CallingDTO dto) {
@@ -96,6 +101,25 @@ public class CallingServiceImpl implements CallingService {
                         .orElseThrow(() -> new BusinessException("Invalid category id."));
                 calling.get().setCategory(category);
             }
+            return repository.save(calling.get());
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Calling not found");
+    }
+
+    @Override
+    public Calling answerStore(Integer id, Integer storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new BusinessException("Invalid store id."));
+
+        Optional<Calling> calling = repository.findById(id);
+
+        if (calling.isPresent()) {
+
+            List<Store> stores = calling.get().getStores();
+            stores.add(store);
+            calling.get().setStores(stores);
+
             return repository.save(calling.get());
         }
 

@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -41,6 +43,7 @@ public class Store {
     @OneToOne()
     private Account account;
 
+    @JsonIgnore()
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(name = "store_callings", joinColumns = @JoinColumn(name = "store_id"), inverseJoinColumns = @JoinColumn(name = "calling_id"))
     private List<Calling> callings;
