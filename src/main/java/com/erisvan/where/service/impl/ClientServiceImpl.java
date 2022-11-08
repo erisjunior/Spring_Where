@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.erisvan.where.exception.BusinessException;
+import com.erisvan.where.model.Account;
 import com.erisvan.where.model.Client;
+import com.erisvan.where.repository.AccountRepository;
 import com.erisvan.where.repository.ClientRepository;
 import com.erisvan.where.rest.dto.ClientDTO;
 import com.erisvan.where.service.ClientService;
@@ -19,18 +22,27 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     ClientRepository repository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     @Override
     public Client save(ClientDTO dto) {
         Client client = new Client();
         client.setName(dto.getName());
-        client.setAccount(dto.getAccount());
-        client.setCallings(dto.getCallings());
+
+        Account account = accountRepository
+                .findById(dto.getAccountId())
+                .orElseThrow(() -> new BusinessException("Invalid account id."));
+
+        client.setAccount(account);
+
         return repository.save(client);
     }
 
     @Override
-    public Optional<Client> get(Integer id) {
-        return repository.findById(id);
+    public Client get(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
     }
 
     @Override
@@ -49,8 +61,14 @@ public class ClientServiceImpl implements ClientService {
 
         if (client.isPresent()) {
             client.get().setName(dto.getName() != null ? dto.getName() : client.get().getName());
-            client.get().setAccount(dto.getAccount() != null ? dto.getAccount() : client.get().getAccount());
-            client.get().setCallings(dto.getCallings() != null ? dto.getCallings() : client.get().getCallings());
+
+            if (dto.getAccountId() != null) {
+                Account account = accountRepository
+                        .findById(dto.getAccountId())
+                        .orElseThrow(() -> new BusinessException("Invalid account id."));
+                client.get().setAccount(account);
+            }
+
             return repository.save(client.get());
         }
 

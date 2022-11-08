@@ -23,14 +23,13 @@ public class CategoryServiceImpl implements CategoryService {
     public Category save(CategoryDTO dto) {
         Category category = new Category();
         category.setName(dto.getName());
-        category.setCallings(dto.getCallings());
-        category.setStores(dto.getStores());
         return repository.save(category);
     }
 
     @Override
-    public Optional<Category> get(Integer id) {
-        return repository.findById(id);
+    public Category get(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
     }
 
     @Override
@@ -49,8 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (category.isPresent()) {
             category.get().setName(dto.getName() != null ? dto.getName() : category.get().getName());
-            category.get().setCallings(dto.getCallings() != null ? dto.getCallings() : category.get().getCallings());
-            category.get().setStores(dto.getStores() != null ? dto.getStores() : category.get().getStores());
             return repository.save(category.get());
         }
 

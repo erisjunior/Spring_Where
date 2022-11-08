@@ -8,8 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.erisvan.where.exception.BusinessException;
 import com.erisvan.where.model.Calling;
+import com.erisvan.where.model.Category;
+import com.erisvan.where.model.Client;
 import com.erisvan.where.repository.CallingRepository;
+import com.erisvan.where.repository.CategoryRepository;
+import com.erisvan.where.repository.ClientRepository;
 import com.erisvan.where.rest.dto.CallingDTO;
 import com.erisvan.where.service.CallingService;
 
@@ -19,19 +24,37 @@ public class CallingServiceImpl implements CallingService {
     @Autowired
     CallingRepository repository;
 
+    @Autowired
+    ClientRepository clientRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
     public Calling save(CallingDTO dto) {
         Calling calling = new Calling();
         calling.setTitle(dto.getTitle());
         calling.setDescription(dto.getDescription());
-        calling.setClient(dto.getClient());
-        calling.setStores(dto.getStores());
+
+        Client client = clientRepository
+                .findById(dto.getClientId())
+                .orElseThrow(() -> new BusinessException("Invalid client id."));
+
+        calling.setClient(client);
+
+        Category category = categoryRepository
+                .findById(dto.getCategoryId())
+                .orElseThrow(() -> new BusinessException("Invalid category id."));
+
+        calling.setCategory(category);
+
         return repository.save(calling);
     }
 
     @Override
-    public Optional<Calling> get(Integer id) {
-        return repository.findById(id);
+    public Calling get(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Calling not found"));
     }
 
     @Override
@@ -52,8 +75,19 @@ public class CallingServiceImpl implements CallingService {
             calling.get().setTitle(dto.getTitle() != null ? dto.getTitle() : calling.get().getTitle());
             calling.get().setDescription(
                     dto.getDescription() != null ? dto.getDescription() : calling.get().getDescription());
-            calling.get().setClient(dto.getClient() != null ? dto.getClient() : calling.get().getClient());
-            calling.get().setStores(dto.getStores() != null ? dto.getStores() : calling.get().getStores());
+
+            if (dto.getClientId() != null) {
+                Client client = clientRepository
+                        .findById(dto.getClientId())
+                        .orElseThrow(() -> new BusinessException("Invalid client id."));
+                calling.get().setClient(client);
+            }
+            if (dto.getCategoryId() != null) {
+                Category category = categoryRepository
+                        .findById(dto.getCategoryId())
+                        .orElseThrow(() -> new BusinessException("Invalid category id."));
+                calling.get().setCategory(category);
+            }
             return repository.save(calling.get());
         }
 

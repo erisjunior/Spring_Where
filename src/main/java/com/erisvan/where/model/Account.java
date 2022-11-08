@@ -26,7 +26,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column
+    @Column(unique = true)
     @NotEmpty(message = "{field.login.required}")
     private String login;
 

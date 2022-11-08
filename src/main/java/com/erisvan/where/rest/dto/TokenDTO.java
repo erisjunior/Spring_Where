@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class AccountInfoDTO {
-    private String login;
+@AllArgsConstructor
+public class TokenDTO {
+  private String login;
+  private String token;
 }

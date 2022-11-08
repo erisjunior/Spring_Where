@@ -15,8 +15,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.erisvan.where.exception.BusinessException;
+import com.erisvan.where.exception.IncorrectCredentialsException;
 import com.erisvan.where.model.Account;
+import com.erisvan.where.model.Avatar;
+import com.erisvan.where.model.Client;
+import com.erisvan.where.model.Store;
 import com.erisvan.where.repository.AccountRepository;
+import com.erisvan.where.repository.AvatarRepository;
+import com.erisvan.where.repository.ClientRepository;
+import com.erisvan.where.repository.StoreRepository;
+import com.erisvan.where.rest.dto.AccountCredentialsDTO;
 import com.erisvan.where.rest.dto.AccountDTO;
 
 @Component
@@ -28,13 +37,41 @@ public class AccountServiceImpl implements UserDetailsService {
     @Autowired
     private AccountRepository repository;
 
+    @Autowired
+    private AvatarRepository avatarRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private StoreRepository storeRepository;
+
     @Transactional
-    public Account save(Account account) {
+    public Account save(AccountCredentialsDTO dto) {
+
+        try {
+            Optional<Account> existentAccount = repository.findByLogin(dto.getLogin());
+            if (existentAccount.isPresent()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login already in use");
+            }
+        } catch (Exception e) {
+            if (e instanceof ResponseStatusException) {
+                throw e;
+            }
+        }
+
+        Account account = new Account();
+        account.setLogin(dto.getLogin());
+
+        String encryptedPassword = passwordEncoder.encode(dto.getPassword());
+        account.setPassword(encryptedPassword);
+        account.setAdmin(false);
+
         return repository.save(account);
+
     }
 
-    public Optional<Account> get(Integer id) {
-        return repository.findById(id);
+    public Account get(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found"));
     }
 
     public List<Account> getAll() {
@@ -48,23 +85,76 @@ public class AccountServiceImpl implements UserDetailsService {
     public Account update(Integer id, AccountDTO dto) {
         Optional<Account> account = repository.findById(id);
 
+        try {
+            if (dto.getLogin() != null) {
+                Optional<Account> existentAccount = repository.findByLogin(dto.getLogin());
+                if (existentAccount.isPresent()) {
+                    if (existentAccount.get().getId() != account.get().getId()) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Login already in use");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (e instanceof ResponseStatusException) {
+                throw e;
+            }
+        }
+
         if (account.isPresent()) {
+
+            if (dto.getPassword() != null) {
+                String encryptedPassword = passwordEncoder.encode(dto.getPassword());
+                account.get().setPassword(encryptedPassword);
+            }
+
             account.get().setLogin(dto.getLogin() != null ? dto.getLogin() : account.get().getLogin());
-            account.get().setPassword(dto.getPassword() != null ? dto.getPassword() : account.get().getPassword());
-            account.get().setAvatar(dto.getAvatar() != null ? dto.getAvatar() : account.get().getAvatar());
-            account.get().setStore(dto.getStore() != null ? dto.getStore() : account.get().getStore());
-            account.get().setClient(dto.getClient() != null ? dto.getClient() : account.get().getClient());
+
+            if (dto.getAvatarId() != null) {
+                Avatar avatar = avatarRepository
+                        .findById(dto.getAvatarId())
+                        .orElseThrow(() -> new BusinessException("Invalid avatar id."));
+
+                account.get().setAvatar(avatar);
+            }
+
+            if (dto.getClientId() != null) {
+                Client client = clientRepository
+                        .findById(dto.getAvatarId())
+                        .orElseThrow(() -> new BusinessException("Invalid client id."));
+
+                account.get().setClient(client);
+            }
+
+            if (dto.getStoreId() != null) {
+                Store store = storeRepository
+                        .findById(dto.getStoreId())
+                        .orElseThrow(() -> new BusinessException("Invalid store id."));
+
+                account.get().setStore(store);
+            }
+
             return repository.save(account.get());
         }
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account not found");
+    }
+
+    public UserDetails auth(Account account) {
+        UserDetails user = loadUserByUsername(account.getLogin());
+        boolean passwordMatch = passwordEncoder.matches(account.getPassword(), user.getPassword());
+
+        if (passwordMatch) {
+            return user;
+        }
+
+        throw new IncorrectCredentialsException();
     }
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 
         Account account = repository.findByLogin(login)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                .orElseThrow(() -> new UsernameNotFoundException("Account not found."));
 
         String[] roles;
 

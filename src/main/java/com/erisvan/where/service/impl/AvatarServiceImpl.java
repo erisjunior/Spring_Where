@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.erisvan.where.exception.BusinessException;
+import com.erisvan.where.model.Account;
 import com.erisvan.where.model.Avatar;
+import com.erisvan.where.repository.AccountRepository;
 import com.erisvan.where.repository.AvatarRepository;
 import com.erisvan.where.rest.dto.AvatarDTO;
 import com.erisvan.where.service.AvatarService;
@@ -19,17 +22,26 @@ public class AvatarServiceImpl implements AvatarService {
     @Autowired
     AvatarRepository repository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
     @Override
     public Avatar save(AvatarDTO dto) {
         Avatar avatar = new Avatar();
         avatar.setUrl(dto.getUrl());
-        avatar.setAccount(dto.getAccount());
+
+        Account account = accountRepository
+                .findById(dto.getAccountId())
+                .orElseThrow(() -> new BusinessException("Invalid account id."));
+
+        avatar.setAccount(account);
         return repository.save(avatar);
     }
 
     @Override
-    public Optional<Avatar> get(Integer id) {
-        return repository.findById(id);
+    public Avatar get(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Avatar not found"));
     }
 
     @Override
@@ -48,7 +60,14 @@ public class AvatarServiceImpl implements AvatarService {
 
         if (avatar.isPresent()) {
             avatar.get().setUrl(dto.getUrl() != null ? dto.getUrl() : avatar.get().getUrl());
-            avatar.get().setAccount(dto.getAccount() != null ? dto.getAccount() : avatar.get().getAccount());
+
+            if (dto.getAccountId() != null) {
+                Account account = accountRepository
+                        .findById(dto.getAccountId())
+                        .orElseThrow(() -> new BusinessException("Invalid account id."));
+                avatar.get().setAccount(account);
+            }
+
             return repository.save(avatar.get());
         }
 

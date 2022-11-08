@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CallingDTO {
-    private String title;
-    private String description;
-    private Integer clientId;
-    private Integer categoryId;
+public class AccountCredentialsDTO {
+    private String login;
+    private String password;
 }

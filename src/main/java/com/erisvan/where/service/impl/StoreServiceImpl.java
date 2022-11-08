@@ -8,7 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.erisvan.where.exception.BusinessException;
+import com.erisvan.where.model.Account;
+import com.erisvan.where.model.Category;
 import com.erisvan.where.model.Store;
+import com.erisvan.where.repository.AccountRepository;
+import com.erisvan.where.repository.CategoryRepository;
 import com.erisvan.where.repository.StoreRepository;
 import com.erisvan.where.rest.dto.StoreDTO;
 import com.erisvan.where.service.StoreService;
@@ -19,18 +24,36 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     StoreRepository repository;
 
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     @Override
     public Store save(StoreDTO dto) {
-        Store client = new Store();
-        client.setName(dto.getName());
-        client.setAccount(dto.getAccount());
-        client.setCallings(dto.getCallings());
-        return repository.save(client);
+        Store store = new Store();
+        store.setName(dto.getName());
+
+        Account account = accountRepository
+                .findById(dto.getAccountId())
+                .orElseThrow(() -> new BusinessException("Invalid account id."));
+
+        store.setAccount(account);
+
+        Category category = categoryRepository
+                .findById(dto.getCategoryId())
+                .orElseThrow(() -> new BusinessException("Invalid category id."));
+
+        store.setCategory(category);
+
+        return repository.save(store);
     }
 
     @Override
-    public Optional<Store> get(Integer id) {
-        return repository.findById(id);
+    public Store get(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
     }
 
     @Override
@@ -45,13 +68,26 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public Store update(Integer id, StoreDTO dto) {
-        Optional<Store> client = repository.findById(id);
+        Optional<Store> store = repository.findById(id);
 
-        if (client.isPresent()) {
-            client.get().setName(dto.getName() != null ? dto.getName() : client.get().getName());
-            client.get().setAccount(dto.getAccount() != null ? dto.getAccount() : client.get().getAccount());
-            client.get().setCallings(dto.getCallings() != null ? dto.getCallings() : client.get().getCallings());
-            return repository.save(client.get());
+        if (store.isPresent()) {
+            store.get().setName(dto.getName() != null ? dto.getName() : store.get().getName());
+
+            if (dto.getAccountId() != null) {
+                Account account = accountRepository
+                        .findById(dto.getAccountId())
+                        .orElseThrow(() -> new BusinessException("Invalid account id."));
+                store.get().setAccount(account);
+            }
+
+            if (dto.getCategoryId() != null) {
+                Category category = categoryRepository
+                        .findById(dto.getCategoryId())
+                        .orElseThrow(() -> new BusinessException("Invalid category id."));
+                store.get().setCategory(category);
+            }
+
+            return repository.save(store.get());
         }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found");

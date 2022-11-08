@@ -1,7 +1,6 @@
 package com.erisvan.where.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import com.erisvan.where.rest.dto.CategoryDTO;
 public interface CategoryService {
     Category save(CategoryDTO dto);
 
-    Optional<Category> get(Integer id);
+    Category get(Integer id);
 
     List<Category> getAll();
 

@@ -1,7 +1,6 @@
 package com.erisvan.where.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import com.erisvan.where.rest.dto.AvatarDTO;
 public interface AvatarService {
     Avatar save(AvatarDTO dto);
 
-    Optional<Avatar> get(Integer id);
+    Avatar get(Integer id);
 
     List<Avatar> getAll();
 

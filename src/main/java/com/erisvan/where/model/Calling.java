@@ -44,6 +44,10 @@ public class Calling {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(name = "store_callings", joinColumns = @JoinColumn(name = "calling_id"), inverseJoinColumns = @JoinColumn(name = "store_id"))
     private List<Store> stores;

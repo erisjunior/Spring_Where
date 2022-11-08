@@ -15,31 +15,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erisvan.where.model.Client;
-import com.erisvan.where.rest.dto.ClientDTO;
-import com.erisvan.where.service.ClientService;
+import com.erisvan.where.model.Category;
+import com.erisvan.where.rest.dto.CategoryDTO;
+import com.erisvan.where.service.CategoryService;
 
-@RequestMapping("/api/clients")
+@RequestMapping("/api/categories")
 @RestController
-public class ClientController {
+public class CategoryController {
 
     @Autowired
-    @Qualifier("clientServiceImpl")
-    ClientService service;
+    @Qualifier("categoryServiceImpl")
+    CategoryService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Client save(@RequestBody ClientDTO dto) {
+    public Category save(@RequestBody CategoryDTO dto) {
         return service.save(dto);
     }
 
     @GetMapping("{id}")
-    public Client get(@PathVariable Integer id) {
+    public Category get(@PathVariable Integer id) {
         return service.get(id);
     }
 
     @GetMapping
-    public List<Client> getAll(Client filter) {
+    public List<Category> getAll(Category filter) {
         return service.getAll();
     }
 
@@ -51,7 +51,7 @@ public class ClientController {
 
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable Integer id, @RequestBody ClientDTO dto) {
+    public void update(@PathVariable Integer id, @RequestBody CategoryDTO dto) {
         service.update(id, dto);
     }
 

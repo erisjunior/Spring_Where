@@ -1,7 +1,6 @@
 package com.erisvan.where.rest.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +34,7 @@ public class CallingController {
     }
 
     @GetMapping("{id}")
-    public Optional<Calling> get(@PathVariable Integer id) {
+    public Calling get(@PathVariable Integer id) {
         return service.get(id);
     }
 
